@@ -3,7 +3,6 @@ var Api = setupSpoonflowerApi();
 function setupSpoonflowerApi() {
   var baseUrl = 'http://api.v1.spoonflower.com/design/';
   var limit = '40';
-  http://api.v1.spoonflower.com:80/design/search?q=goats&&limit=40&&&substrate=fabric&&&&color1=%234e81bd&&&&&jsonp=callback
 
   function fetchUrl(url) {
     var promise = $.Deferred();
@@ -11,7 +10,8 @@ function setupSpoonflowerApi() {
     var req = $.ajax({
       //url property with this value
       url: url,
-      dataType: "jsonp",
+      dataType: 'jsonp',
+      jsonpCallback: 'callback',
       //HTTP Basic Authentication... would obviously want to do something different
       //in the long run so credentials are not accessible in the code
       beforeSend: function (xhr) {
@@ -31,19 +31,16 @@ function setupSpoonflowerApi() {
 
   var self = {
 
-    getPopularList: function(limit) {
+    getPopularList: function() {
       var freshtastic = '&sort=freshtastic';
-      var url = baseUrl + 'search?limit=' + limit + freshtastic;
+      var url = baseUrl + 'search?limit=' + limit + freshtastic + '&jsonp=callback';
       return fetchUrl(url);
     },
 
     getDesignBySearch: function(keywordSearch, substrateSearch, colorSearch ) {
-      var url = baseUrl + 'search?' +
-        keywordSearch +
-        '&limit=' + limit + '&'
-        substrateSearch + '&' +
-        colorSearch + '&' +
-        'jsonp=callback';
+      var url = baseUrl + 'search?' + keywordSearch + '&limit=' + limit + '&'
+        substrateSearch + '&' + colorSearch + '&jsonp=callback';
+        console.log(url);
       return fetchUrl(url);
     }
 
