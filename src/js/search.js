@@ -38,19 +38,32 @@ $(function() {
    $('.new-search').submit(function(e) {
      e.preventDefault();
 
-     //grab the values of the search options
+     //grab the values of the search options, change them if there is a value
+     var keywordSearch = '';
      var keyword = $('.keyword').val();
-     var color = $('.color').val();
-     var product = '';
-     //looking for a checked product button, if exists, resets product var
-     var checked = $('.product-section input[type=radio]:checked');
-
-     if (checked.length > 0) {
-         product = checked.val();
+     if (keyword !== '') {
+      // keyword = keyword.split(' ').join('%20');
+      //not sure that is necessary
+       console.log(keyword);
+       keywordSearch = 'q=' + keyword;
      }
 
-     Api.getDesignBySearch(keyword, product, color).done(function(response) {
+     var colorSearch = '';
+     var color = $('.color').val();
+     if (color !== '') {
+       colorSearch = 'color1=' + color;
+     }
+
+     var productSearch = '';
+     //looking for a checked product button, if exists, resets product variable
+     var checked = $('.product-section input[type=radio]:checked');
+     if (checked.length > 0) {
+         productSearch = 'substrate=' + checked.val();
+     }
+
+     Api.getDesignBySearch(keywordSearch, productSearch, colorSearch).done(function(response) {
        var results = response.results[0].results;
+       console.log(results);
        var resultElements = apiResultsToHtml(results);
        if (results.length === 0) {
          $('.results-list').empty().append('<i class="fa fa-frown-o"></i> There are no fabrics matching your keyword. Please try again.');

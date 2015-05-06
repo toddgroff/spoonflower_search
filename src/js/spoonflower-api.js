@@ -38,8 +38,8 @@ function setupSpoonflowerApi() {
     },
 
     getDesignBySearch: function(keywordSearch, substrateSearch, colorSearch ) {
-      var url = baseUrl + 'search?' + keywordSearch + '&limit=' + limit + '&'
-        substrateSearch + '&' + colorSearch + '&jsonp=callback';
+      var url = baseUrl + 'search?' + keywordSearch + '&' +
+        substrateSearch + '&' + colorSearch + '&limit=' + limit + '&jsonp=callback';
         console.log(url);
       return fetchUrl(url);
     }
