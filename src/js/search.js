@@ -2,6 +2,11 @@ $(function() {
 
   showPopularResults();
 
+  $('.product-label').on('click', function () {
+    $('.product-label').removeClass('selected');
+    $(this).addClass('selected');
+  });
+
   ////////////////////////////////////////////////////////////////////////////////
  //GET 40 MOST POPULAR TO DISPLAY ON LOAD
 
@@ -14,22 +19,35 @@ $(function() {
  }
 
  ////////////////////////////////////////////////////////////////////////////////
+ //ADD CLASS TO SELECTED RADIO LABEL
+
+  function addClass() {
+    Api.getPopularList().done(function(response) {
+      var results = response.results[0].results;
+      var resultElements = apiResultsToHtml(results);
+      $('.results-list').empty().append(resultElements);
+    });
+  }
+
+
+
+ ////////////////////////////////////////////////////////////////////////////////
    // COLOR PICKER
 
-  //  $('#picker').colpick({
-  //    // flat: true,
-  //    layout: 'hex',
-  //    submit: 0,
-  //    colorScheme: 'light',
-  //    onChange: function(hsb, hex, rgb, el, bySetColor) {
-  //      $(el).css('border-color', '#' + hex);
-  //      // Fill the text box just if the color was set using the picker,
-  //      // and not the colpickSetColor function.
-  //      if (!bySetColor) $(el).val(hex);
-  //    }
-  //  }).keyup(function() {
-  //    $(this).colpickSetColor(this.value);
-  //  });
+   $('#picker').colpick({
+     // flat: true,
+     layout: 'hex',
+     submit: 0,
+     colorScheme: 'light',
+     onChange: function(hsb, hex, rgb, el, bySetColor) {
+       $(el).css('border-color', '#' + hex);
+       // Fill the text box just if the color was set using the picker,
+       // and not the colpickSetColor function.
+       if (!bySetColor) $(el).val(hex);
+     }
+   }).keyup(function() {
+     $(this).colpickSetColor(this.value);
+   });
 
 
    ////////////////////////////////////////////////////////////////////////////////
@@ -91,14 +109,18 @@ $(function() {
 
       var designName = $('<div class="design-name-container"><h3 class="design-name">' + designItem.name + '</h3></div>');
 
-      var designer = $('<div class="designer-container"><h3 class="fabric-designer">by ' + designItem.user.screen_name + '</h3></div>');
+      var designer = $('<div class="designer-container"><span class="designer">by ' + designItem.user.screen_name + '</span></div>');
+
+      var description = $('<div class="description-container"><p class="description">' + designItem.short_description + '</p></div>');
 
       var li = $('<li></li>');
       li.data('item', designItem);
-      li.addClass('design-preview card search-result');
+      li.addClass('design-preview search-result');
       li.append(imgCont);
       li.append(designName);
       li.append(designer);
+      li.append(description);
+
 
       return li;
     });

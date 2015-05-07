@@ -15,7 +15,7 @@ function setupSpoonflowerApi() {
       //HTTP Basic Authentication... would obviously want to do something different
       //in the long run so credentials are not accessible in the code
       beforeSend: function (xhr) {
-        xhr.setRequestHeader ('Authorization', 'Basic ' + btoa('demo:irondemo'))
+        xhr.setRequestHeader ('Authorization', 'Basic ' + btoa('demo:irondemo'));
       },
       timeout: 5000, // fake .fail() a lot of time for the request to be successfully completed
       success: function(data) {
@@ -44,6 +44,6 @@ function setupSpoonflowerApi() {
       return fetchUrl(url);
     }
 
-  }
+  };
   return self;
 }

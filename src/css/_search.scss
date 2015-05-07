@@ -1,0 +1,196 @@
+body {
+  font-family: $main-font;
+  font-weight: $main-font-weight;
+  color: $darkgray;
+}
+
+main {
+  max-width: 1088px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+header {
+  background: #EEE;
+  border-bottom: $border;
+
+  .logo {
+    margin: 0.25em 2em;
+  }
+
+}
+
+/*
+Search Section
+*/
+
+.search-container {
+  margin: 1em 0;
+
+  input {
+    transition: $transition;
+    font-family: $main-font;
+    font-weight: $main-font-weight;
+    font-size: 0.75em;
+    padding: $padding;
+    border: $border;
+    outline: none;
+
+    &:focus {
+      outline: none;
+      background: $gray;
+      color: white;
+      transition: $transition;
+    }
+  }
+  .search-cat {
+    display: inline-block;
+    margin-right: 1em;
+    vertical-align: top;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+
+  }
+
+
+  .upper-label {
+    display: block;
+    padding: $padding 0;
+  }
+
+  .search-btn {
+    cursor: pointer;
+    display: block;
+    border: $border;
+    padding: 0.75em;
+    width: 100%;
+    color: white;
+    font-size: 1em;
+    font-family: $main-font;
+    font-weight: $main-font-weight;
+    background: $gray;
+    text-transform: uppercase;
+    transition: $transition;
+    margin-top: 2em;
+
+    &:focus,
+    &:hover {
+      outline:none;
+      color: $gray;
+      background: white;
+      transition: $transition;
+
+    }
+  }
+
+  .product-section {
+
+
+    .product-label {
+      text-transform: uppercase;
+      font-size: 0.7em;
+      color: $gray;
+      cursor: pointer;
+      padding: $padding;
+      transition: $transition;
+
+      &.selected,
+      &:hover {
+        color: white;
+        background: $gray;
+        transition: $transition;
+      }
+
+    }
+
+
+    .product {
+      width: 0;
+      opacity: 0;
+      margin-left: -2px;
+    }
+
+
+  }
+
+  .past-searches {
+
+    h4 {
+      color: $gray;
+      font-weight: $main-font-weight;
+      cursor: pointer;
+    }
+  }
+
+}
+
+
+/*
+Results Section
+*/
+
+.results {
+  margin: 3em 0;
+
+  .results-list {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    li {
+      display: inline-block;
+      flex: 0 1 auto;
+      width: 235px;
+      height: 350px;
+      margin: 0.5em;
+      background: white;
+      padding: $padding;
+      border: $border;
+      position: relative;
+
+      img {
+        width: 100%;
+      }
+
+      .design-name-container {
+        font-size: 0.9em;
+        height: 75px;
+        overflow: auto;
+        color: $darkgray;
+      }
+
+      .designer-container {
+        color: $gray;
+        font-size: 0.75em;
+      }
+
+      .description-container {
+        color: white;
+        font-size: 0.75em;
+        background: $gray;
+        padding: $padding;
+        width: 96%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 500;
+
+        &:before {
+          position: absolute;
+          top: -60px;
+          left: 15px;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 0 15px 30px 15px;
+          border-color: transparent transparent blue transparent;
+
+        }
+      }
+    }
+
+  }
+}
