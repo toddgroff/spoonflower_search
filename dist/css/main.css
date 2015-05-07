@@ -237,6 +237,7 @@ Results Section
         background: #B5B5B5;
         padding: 0.5em;
         width: 96%;
+        height: 80px;
         position: absolute;
         opacity: 0;
         top: 100%;

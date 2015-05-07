@@ -221,6 +221,7 @@ Results Section
         background: $gray;
         padding: $padding;
         width: 96%;
+        height: 80px;
         position: absolute;
         opacity: 0;
         top: 100%;
@@ -229,7 +230,7 @@ Results Section
         z-index: 500;
         transition: $transition;
 
-        
+
       }
     }
   }
