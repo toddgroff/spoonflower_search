@@ -5,7 +5,6 @@
 var srcDir = './src',
     destDir = './dist',
     bowerDir = './bower_components';
-    root = '.'
 
 // src holds the values of source folders
 var src = {
@@ -27,7 +26,7 @@ var dest = {
   js:       destDir + '/js',
   img:      destDir + '/img',
   fonts:    destDir + '/fonts',
-  html:     root
+  html:     destDir
 };
 
 // Export our src and dest configurations so they can
