@@ -1,4 +1,4 @@
-$(function() {
+app.search = $(function() {
   var pastSearches = [];
 
   loadSearches();
@@ -11,45 +11,89 @@ $(function() {
 
   function loadSearches () {
    pastSearches = JSON.parse(localStorage.getItem('pastSearches') || '[]');
-   console.log(pastSearches);
    return pastSearches;
   }
+
 
   ////////////////////////////////////////////////////////////////////////////////
   //ADDING EVENT HANDLER FOR LOADING PAST RESULTS AND RENDERING AS HTML
 
   function pastSearchesToHtml (pastSearches) {
-    pastSearches.map(function (pastSearch) {
+    return pastSearches.map(function (pastSearch) {
       var keyword = pastSearch.keywordSearch;
-      var color = '#' + pastSearch.colorSearch;
+      var color =  pastSearch.colorSearch;
       var product = pastSearch.productSearch.slice(10);
-      console.log(keyword + color + product);
 
       var colorBlock = $('<span class="color-block"></span>');
-      colorBlock.css('background-color', color);
+      colorBlock.css('background-color', '#' + color);
 
-      var searchItem = $('<li class="past-search-item">' product + ' ' + keyword + ' ' +  colorBlock'</li>');
+      var searchItem = $('<li class="past-search-item"></li>');
+      searchItem.attr('data-keyword', keyword);
+      searchItem.attr('data-color', color);
+      searchItem.attr('data-product', pastSearch.productSearch);
 
-      return searchItem;
+      searchItem.append(product + ' ');
+      searchItem.append(keyword + ' ');
+      searchItem.append(colorBlock);
+
+      return searchItem[0];
     });
   }
 
-  function pastSearchesToPage ()
+  function pastSearchesToPage () {
+    pastSearches = loadSearches();
     if (pastSearches.length === 0) {
-      $('.past-searches-list').append('<li class="past-search-item">You don\'t currently have any past searches</li>');
+      $('.past-searches-list').empty().append('<li class="past-search-item">You don\'t currently have any past searches</li>');
     } else {
-      $('.past-searches-list').empty().append(pastSearchesToHtml(pastSearches));
+      searchItems = pastSearchesToHtml(pastSearches);
+      $('.past-searches-list').empty().append(searchItems);
     }
-  });
+  }
 
   $('.past-searches').on('click', function (e) {
     e.stopPropagation();
-    pastSearchesToPage(pastSearches);
-    $('.past-searches-list').toggleClass('show')
+    pastSearchesToPage();
+    $('.past-searches-list').toggleClass('show');
     $('body').on('click', function (e) {
       e.stopPropagation();
-      $('past-searches-list').removeclass('show');
-    })
+      $('.past-searches-list').removeClass('show');
+    });
+  });
+
+  function viewPastSearch () {
+    $('.past-searches-list').on('click', '.past-search-item', function () {
+      var pastSearchItem = $(this);
+
+      //grab the values of the search options, change them if there is a value
+      var keywordSearch = '';
+      var keyword = pastSearchItem.attr('data-keyword');
+
+      if (keyword !== '') {
+       // keyword = keyword.split(' ').join('%20');
+       //not sure that is necessary
+        keywordSearch = 'q=' + keyword;
+      }
+
+      var colorSearch = '';
+      var color = pastSearchItem.attr('data-color');
+      if (color !== '') {
+        colorSearch = 'color1=' + color;
+      }
+
+      var productSearch = '';
+      //looking for a checked product button, if exists, resets product variable
+      var product = pastSearchItem.attr('data-product');
+      if (product !== '') {
+          productSearch = product;
+      }
+
+      printSearchResults(keywordSearch, colorSearch, productSearch);
+    });
+
+  }
+
+  viewPastSearch();
+
 
   ////////////////////////////////////////////////////////////////////////////////
   //ADD CLASS TO SELECTED RADIO LABEL
@@ -93,79 +137,80 @@ $(function() {
    ////////////////////////////////////////////////////////////////////////////////
    //GET BY SEARCH CRITERIA
 
-   $('.new-search').submit(function(e) {
-     e.preventDefault();
+   function runSearch () {
+     $('.new-search').submit(function(e) {
+       e.preventDefault();
 
-     //grab the values of the search options, change them if there is a value
-     var keywordSearch = '';
-     var keyword = $('.keyword').val();
-     if (keyword !== '') {
-      // keyword = keyword.split(' ').join('%20');
-      //not sure that is necessary
-       console.log(keyword);
-       keywordSearch = 'q=' + keyword;
-     }
-
-     var colorSearch = '';
-     var color = $('.color').val();
-     if (color !== '') {
-       console.log(color);
-       colorSearch = 'color1=' + color;
-     }
-
-     var productSearch = '';
-     //looking for a checked product button, if exists, resets product variable
-     var checked = $('.product-section input[type=radio]:checked');
-     if (checked.length > 0) {
-       console.log(checked.val());
-         productSearch = 'substrate=' + checked.val();
-     }
-
-     ////////////////////////////////////////////////////////////////////////////////
-     //SAVING PAST SEARCHES TO LOCAL STORAGE
-     var search = {
-       keywordSearch: keyword,
-       colorSearch: color,
-       productSearch: productSearch,
-     };
-
-     console.log(search);
-
-    function saveSearches () {
-      console.log(pastSearches.indexOf(search));
-    //NOT CERTAIN WHY THIS IS NOT WORKING, HAVE TRIED OTHER THINGS SUCH AS
-    //.CONTAINS BUT TO NO AVAIL
-     if (pastSearches.indexOf(search) < 0) {
-       pastSearches.unshift(search);
-     }
-
-     if (pastSearches.length > 5) {
-         pastSearches.pop();
+       //grab the values of the search options, change them if there is a value
+       var keywordSearch = '';
+       var keyword = $('.keyword').val();
+       if (keyword !== '') {
+        // keyword = keyword.split(' ').join('%20');
+        //not sure that is necessary
+         keywordSearch = 'q=' + keyword;
        }
-      localStorage.setItem('pastSearches', JSON.stringify(pastSearches))
-    }
 
-    saveSearches();
-
-    console.log(pastSearches);
-
-    ////////////////////////////////////////////////////////////////////////////////
-    //API CALL WITH SEARCH CRITERIA
-
-     Api.getDesignBySearch(keywordSearch, productSearch, colorSearch).done(function(response) {
-       var results = response.results[0].results;
-       console.log(results);
-       var resultElements = apiResultsToHtml(results);
-       if (results.length === 0) {
-         $('.results-list').empty().append('<i class="fa fa-frown-o"></i> There are no fabrics matching your keyword. Please try again.');
-         $('.results-list').addClass('error');
-       } else {
-         $('.results-list').empty().append(resultElements);
+       var colorSearch = '';
+       var color = $('.color').val();
+       if (color !== '') {
+         colorSearch = 'color1=' + color;
        }
+
+       var productSearch = '';
+       //looking for a checked product button, if exists, resets product variable
+       var checked = $('.product-section input[type=radio]:checked');
+       if (checked.length > 0) {
+           productSearch = 'substrate=' + checked.val();
+       }
+
+       ////////////////////////////////////////////////////////////////////////////////
+       //SAVING PAST SEARCHES TO LOCAL STORAGE
+       var search = {
+         keywordSearch: keyword,
+         colorSearch: color,
+         productSearch: productSearch,
+       };
+
+
+      function saveSearches () {
+      //NOT CERTAIN WHY THIS IS NOT WORKING, HAVE TRIED OTHER THINGS SUCH AS
+      //.CONTAINS BUT TO NO AVAIL
+       if (pastSearches.indexOf(search) < 0) {
+         pastSearches.unshift(search);
+       }
+
+       if (pastSearches.length > 5) {
+           pastSearches.pop();
+         }
+        localStorage.setItem('pastSearches', JSON.stringify(pastSearches))
+      }
+
+      saveSearches();
+
+
+     printSearchResults(keywordSearch, productSearch, colorSearch);
 
      });
+  }
+
+  runSearch();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //API CALL WITH SEARCH CRITERIA
+
+  function printSearchResults (keywordSearch, productSearch, colorSearch) {
+   Api.getDesignBySearch(keywordSearch, productSearch, colorSearch).done(function(response) {
+     var results = response.results[0].results;
+     var resultElements = apiResultsToHtml(results);
+     if (results.length === 0) {
+       $('.results-list').empty().append('<i class="fa fa-frown-o"></i> There are no fabrics matching your search. Please try again.');
+       $('.results-list').addClass('error');
+     } else {
+       $('.results-list').empty().append(resultElements);
+     }
 
    });
+ }
 
   ////////////////////////////////////////////////////////////////////////////////
   //Translate API calls to html

@@ -116,11 +116,54 @@ Search Section
   }
 
   .past-searches {
+    position: relative;
 
     h4 {
-      color: $gray;
+      color: teal;
       font-weight: $main-font-weight;
       cursor: pointer;
+    }
+
+    .past-searches-list {
+      background-color: $gray;
+      border: $border;
+      color: white;
+      min-width: 200px;
+      position: absolute;
+      top: -100%;
+      left: 0;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 1000;
+      transition: $transition;
+
+      &.show {
+        opacity: 1;
+        top: 104%;
+        visibility: visible;
+        transition: $transition;
+
+      }
+
+      .past-search-item {
+        cursor: pointer;
+        padding: $padding;
+        text-align: left;
+        transition: $transition;
+
+
+        &:hover {
+          background: white;
+          color: $gray;
+          transition: $transition;
+        }
+
+        .color-block {
+          width: 25px;
+          height: 25px;
+          display: inline-block;
+        }
+      }
     }
   }
 }
@@ -186,18 +229,7 @@ Results Section
         z-index: 500;
         transition: $transition;
 
-        &:before {
-          content: '';
-          position: absolute;
-          bottom: 100%;
-          left: 50%;
-          transform: translate(-50%,0);
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 0 15px 15px 15px;
-          border-color: transparent transparent $gray transparent;
-        }
+        
       }
     }
   }
