@@ -783,6 +783,21 @@ function setupSpoonflowerApi() {
   var baseUrl = 'http://api.v1.spoonflower.com/design/';
   var limit = '40';
 
+
+  // $(function () {
+  //
+  //   $.ajax({
+  //     url: 'http://api.v1.spoonflower.com/design/search?q=chevron&callback=?',
+  //     dataType: 'jsonp',
+  //     beforeSend: function (xhr) {
+  //       xhr.setRequestHeader ('Authorization', 'Basic ' + btoa('demo:irondemo'))
+  //     }
+  //   }).done(function (result) {
+  //     console.log(result);
+  //   });
+  //
+  // });
+
   function fetchUrl(url) {
     var promise = $.Deferred();
     // this has to change for JSONP
